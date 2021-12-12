@@ -1,5 +1,4 @@
 predict1 = ""
-predict2 = ""
 
 Webcam.set ({
     height : 300,
@@ -29,7 +28,35 @@ function modelLoaded() {
 function speak() {
     var synth = window.speechSynthesis;
     speak1 = "The first prediction is " + predict1
-    speak2 = "And the second prediction is " + predict2
-    var utterThis = new SpeechSynthesisUtterance(speak1 + speak2);
+    var utterThis = new SpeechSynthesisUtterance(speak1);
     synth.speak(utterThis);
+}
+
+function snap() {
+    img = document.getElementById("cap_img")
+    classifier.classify(img, gotResults)
+}
+
+function gotResults(error, results) {
+    if (error) {
+        console.error(error)
+    }
+    else {
+        console.log(results)
+        document.getElementById("emona").innerHTML = results[0].label;
+        predict1 = results[0].label;
+        speak();
+
+        if(results[0].label == "Best") {
+            document.getElementById("emo").innerHTML = "&#128512;"
+        }
+        else if(results[0].label == "Bad") {
+            document.getElementById("emo").innerHTML = "&#128532;"
+        }
+        else if(results[0].label == "VICTORY ROYALE") {
+            document.getElementById("emo").innerHTML = "&#128545;"
+        }
+        
+
+}
 }
